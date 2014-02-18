@@ -1,18 +1,20 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Mission {
 	private Date dateDebut;
 	private Date dateFin;
 	private Client client;
-	private Consultant [] consultant;
+	private ArrayList<Consultant> consultant;
 	private String description;
 	
-	public Mission(Date pdateDebut,Date pdateFin ,Client pclient ,Consultant pconsultant,String pDescription){
+	public Mission(Date pdateDebut,Date pdateFin ,Client pclient ,ArrayList<Consultant> pconsultant,String pDescription){
 		dateDebut = pdateDebut;
 		dateFin = pdateFin;
 		client=pclient;
+		consultant = pconsultant; 
 	}
 	public Date getDateFin() {
 		return dateFin;
@@ -29,7 +31,7 @@ public class Mission {
 	public Date getDateDebut() {
 		return dateDebut;
 	}
-	public Consultant[] getConsultant() {
+	public ArrayList<Consultant> getConsultant() {
 		return consultant;
 	}
 	public String getDescription() {
@@ -39,7 +41,15 @@ public class Mission {
 		this.description = description;
 	}
 	
+	public void envoyerMission(Consultant c)
+	{
+		consultant.add(c);			
+	}
 	
+	public Consultant envoyerMission()
+	{
+		return null;	
+	}
 	
 	
 }
