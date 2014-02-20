@@ -49,7 +49,11 @@ public class MainView{
 				String key = arg0.getKeyChar()+"";				
 				if(key.equals("\n")) 
 				{
+					try{
 					mainController.commande(commande.getText());
+					}catch (Exception e) {
+						afficher(e.getMessage());
+					}
 					commande.setText("");
 				}
 			}

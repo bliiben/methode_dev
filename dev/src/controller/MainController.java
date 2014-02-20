@@ -10,38 +10,62 @@ import view.MainView;
 public class MainController {
 
 	private MainView mainView;
-
+	private ArrayList<Consultant> listeConsultants;
+	
 	public MainController(MainView mainView) {
 		super();
+		listeConsultants = ConsultantService.listeConsultants();
 		this.mainView = mainView;
 	}
 	
-	public void commande(String commande)
+	public void commande(String commande) throws Exception
 	{
-		if(commande.equals("listeconsultant"))
+		if(commande.matches("listeconsultant.*"))
 		{			
-			ArrayList<Consultant> listeConsultants = ConsultantService.listeConsultants();
 			mainView.afficher("Liste des consultants :");
 			for(Consultant consultant:listeConsultants)
 			{
 				mainView.afficher(consultant.toString());
 			}
 		}
-		else if(commande.equals("listeconsultantlibre"))
+		else if(commande.matches("listeconsultantlibre.*"))
 		{
 			mainView.afficher("Liste des consultants actuellement libre :");
 		}
-		else if(commande.equals("clear"))
+		else if(commande.matches("clear.*"))
 		{
 			mainView.effacer();
-		}		
+		}
+		else if(commande.matches("ajouterconsultant.*")){//add a consultant
+			String res [] = parametre(commande, "ajouterconsultant");
+			for ( String r : res){
+				System.out.println("->"+r);
+			}
+			if( res.length != 4)
+				throw new Exception("Il est nécéssaire de mettre plus de paramètre "+res.length);
+			listeConsultants.add(new Consultant(res[0],res[1],res[2],res[3]));
+			mainView.afficher("Consultant ajouté : "+listeConsultants.get(listeConsultants.size()-1));
+		}
+		else if(commande.matches("supprimerconsultant.*")){//delete a consultant 
+			String res[]=parametre(commande, "supprimerconsultant");
+			if( res.length!=2)
+				throw new Exception("Il manque un paramètre");
+			for(Consultant c : listeConsultants){
+				if( c.getPrenom().equals(res[1]) && c.getNom().equals(res[0]) ){
+					listeConsultants.remove(c);
+					mainView.afficher("Consultant supprimé");
+					break;
+				}
+			}
+		}
 		//cas ou la commande n'est pas reconnue
 		else
 		{
 			mainView.afficher("commande '"+commande+"' inconnue.");
 		}
-			
 	}
 	
-	
+	public static String [] parametre(String commande, String commandeAttendu){
+		return commande.replaceAll(commandeAttendu+" (.*)", "$1").split(";");
+	}
 }
