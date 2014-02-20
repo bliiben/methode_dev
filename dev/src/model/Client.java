@@ -12,7 +12,7 @@ public class Client {
 	}
 	
 	@SuppressWarnings("unused")
-	private Client(String _nomEntreprise, String _numTel, String _adresseMail)
+	public Client(String _nomEntreprise, String _numTel, String _adresseMail)
 	{
 		super();
 		this.nomEntreprise = _nomEntreprise; 
