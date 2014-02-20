@@ -2,19 +2,13 @@ package model;
 
 public class Client {
 	
-	private String nomEntreprise = new String(); 
-	private String numTel = new String(); 
-	private String adresseMail = new String(); 
+	private String nomEntreprise;
+	private String numTel;
+	private String adresseMail; 
 	
-	public Client()
+
+	public Client(String _nomEntreprise, String _numTel, String _adresseMail)
 	{
-		super(); 
-	}
-	
-	@SuppressWarnings("unused")
-	private Client(String _nomEntreprise, String _numTel, String _adresseMail)
-	{
-		super();
 		this.nomEntreprise = _nomEntreprise; 
 		this.numTel = _numTel; 
 		this.adresseMail = _adresseMail; 

@@ -3,15 +3,47 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.Action;
 import javax.swing.JFrame;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultEditorKit;
 
 import controller.MainController;
 
 public class MainView{
 
+	private class PopClickListener extends MouseAdapter {
+	    public void mousePressed(MouseEvent e){
+	        if (e.isPopupTrigger())
+	            doPop(e);
+	    }
+
+	    public void mouseReleased(MouseEvent e){
+	        if (e.isPopupTrigger())
+	            doPop(e);
+	    }
+
+	    private void doPop(MouseEvent e){
+	    	
+	    	
+	    	JPopupMenu popup = new JPopupMenu();
+			Action copyAction = contenu.getActionMap().get(DefaultEditorKit.copyAction);
+			Action cutAction = contenu.getActionMap().get(DefaultEditorKit.cutAction);
+			Action pasteAction = contenu.getActionMap().get(DefaultEditorKit.pasteAction);
+			popup.add (cutAction);
+			popup.add (copyAction);
+			popup.add (pasteAction);
+		
+			
+	        popup.show(e.getComponent(), e.getX(), e.getY());
+	        
+	    }
+	}
 	/**
 	 * 
 	 */
@@ -36,20 +68,27 @@ public class MainView{
 		mainFrame.setLayout(new BorderLayout());
 				
 		contenu = new JTextArea();
-		contenu.setEnabled(false);
-		contenu.setEditable(false);				
+		contenu.setEnabled(true);
+		contenu.setEditable(false);		
 		
+		
+		contenu.addMouseListener(new PopClickListener());
 		commande = new JTextField();
+		commande.addMouseListener(new PopClickListener());
 		
 		//Initialisation des evenements du textfield
 		commande.addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				String key = arg0.getKeyChar()+"";				
+				String key = arg0.getKeyChar()+"";
 				if(key.equals("\n")) 
 				{
+					try{
 					mainController.commande(commande.getText());
+					}catch (Exception e) {
+						afficher(e.getMessage());
+					}
 					commande.setText("");
 				}
 			}
@@ -70,11 +109,12 @@ public class MainView{
 		mainFrame.add(commande, BorderLayout.PAGE_END);
 		
 		//Initilisation des attributs de la vue
-		
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.pack();
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setSize(800, 400);
 		mainFrame.setVisible(true);	
+		
 	}	
 	
 	/**
