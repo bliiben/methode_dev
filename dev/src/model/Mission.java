@@ -40,7 +40,9 @@ public class Mission {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+	public boolean isMissionVacante(){
+		return consultant.isEmpty();
+	}
 	public void envoyerMission(Consultant c)
 	{
 		consultant.add(c);			
