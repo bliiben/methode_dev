@@ -15,7 +15,16 @@ public class Mission {
 		dateFin = pdateFin;
 		client=pclient;
 		consultant = pconsultant; 
+		description = pDescription;
 	}
+	
+	@Override
+	public String toString() {
+		return "Mission [dateDebut=" + dateDebut + ", dateFin=" + dateFin
+				+ ", client=" + client + ", consultant=" + consultant
+				+ ", description=" + description + "]";
+	}
+
 	public Date getDateFin() {
 		return dateFin;
 	}
@@ -46,11 +55,6 @@ public class Mission {
 	public void envoyerMission(Consultant c)
 	{
 		consultant.add(c);			
-	}
-	
-	public Consultant envoyerMission()
-	{
-		return null;	
 	}
 	
 	
