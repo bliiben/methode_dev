@@ -52,9 +52,23 @@ public class Mission {
 	public boolean isMissionVacante(){
 		return consultant.isEmpty();
 	}
-	public void envoyerMission(Consultant c)
+	public void envoyerMission(Consultant c) throws Exception
 	{
-		consultant.add(c);			
+		if(c.isDisponible()){
+			c.setDisponible(false);
+			consultant.add(c);
+		}
+		else{
+			throw new Exception("Le consultant n'est pas disponible");
+		}
+	}
+	/**
+	 * TO BE IMPLEMENTED
+	 */
+	public void retourMission(){
+		for ( Consultant c : this.getConsultant() ){
+			c.setDisponible(true);
+		}
 	}
 	
 	

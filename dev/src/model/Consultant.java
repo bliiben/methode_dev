@@ -5,7 +5,16 @@ public class Consultant {
 	private String prenom;
 	private String adresse;
 	private String telephone;
+	private boolean disponible;
 	
+	public boolean isDisponible() {
+		return disponible;
+	}
+
+	public void setDisponible(boolean disponible) {
+		this.disponible = disponible;
+	}
+
 	public Consultant() {
 		super();
 	}
@@ -17,6 +26,7 @@ public class Consultant {
 		this.prenom = prenom;
 		this.adresse = adresse;
 		this.telephone = telephone;
+		this.disponible = true;
 	}
 
 	public String getNom() {
