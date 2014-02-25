@@ -25,6 +25,9 @@ public class MainController {
 		listeClient=new ArrayList<Client>();
 		listeMission=new ArrayList<Mission>();
 		this.mainView = mainView;
+		
+		listeClient.add(new Client("blagnac","0102030405","toto@gmail.com"));
+		//listeMission.add(new Mission(new Date(),new Date(),listeClient.get(0),new ArrayList<Consultant>(),"essais"));
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -141,6 +144,22 @@ public class MainController {
 			
 			mainView.afficher("Mission ajoutée : "+listeMission.get(listeMission.size()-1));
 		}
+		else if (commande.matches("clientsansmission.*")){//Afficher client sans missions
+			boolean clientSansMission = false;
+			mainView.afficher("Affichage des clients sans missions");
+			for (Client c: listeClient ){
+				clientSansMission = false;
+				for (Mission m : listeMission){
+					if (c == m.getClient()){
+						clientSansMission = true;
+						break;
+					}
+				}
+				if (clientSansMission == false)
+					mainView.afficher(c.toString());
+			}
+		}
+
 		else if(commande.matches("partirenmission.*")){ //partir en mission 
 			String res [] = parametre(commande, "partirenmission");
 			
@@ -181,6 +200,9 @@ public class MainController {
 			
 			mnms.envoyerMission(tmpConsultant);
 			mainView.afficher("Consultant envoyé : "+ mnms.getConsultant()+ " à "+mnms.getClient());
+		}
+		else if(commande.matches("exit.*")){
+			System.exit(0);
 		}
 		//cas ou la commande n'est pas reconnue
 		else
