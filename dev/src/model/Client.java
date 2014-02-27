@@ -52,7 +52,6 @@ public class Client {
 	@Override
 	public String toString()
 	{
-		return "Client [nom entreprise = " + nomEntreprise + ", numéro entreprise : "
-				+ numTel + ", adresse mail de l'entreprise : " + adresseMail + "]"; 
+		return "Client [nom entreprise = " + nomEntreprise + ", numéro entreprise : " + numTel + ", adresse mail de l'entreprise : " + adresseMail + "]"; 
 	}
 }
