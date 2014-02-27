@@ -27,10 +27,15 @@ public class MainController {
 		this.mainView = mainView;
 		
 		listeClient.add(new Client("blagnac","0102030405","toto@gmail.com"));
-		//listeMission.add(new Mission(new Date(),new Date(),listeClient.get(0),new ArrayList<Consultant>(),"essais"));
+		listeMission.add(new Mission(new Date(),new Date(),listeClient.get(0),new ArrayList<Consultant>(),"essais"));
+		try {
+			listeMission.get(0).envoyerMission(listeConsultants.get(3));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void commande(String commande) throws Exception
 	{
 		if(commande.matches("listeconsultant.*"))
@@ -45,6 +50,43 @@ public class MainController {
 		{
 			mainView.afficher("Liste des consultants actuellement libre :");
 			
+			this.mainView.afficher("Consultant disponibles : ");
+			for(Consultant c : this.listeConsultants){
+				if(c.isDisponible()){
+					this.mainView.afficher(c.toString());
+				}
+			}
+		}
+		else if (commande.matches("disponibiliteconsultant.*")){
+			String res [] = parametre(commande, "disponibiliteconsultant");
+			if( res.length != 2){
+				throw new Exception("Il n'y a pas assé d'arguments");
+			}
+			Consultant temp = null;
+			for( Consultant c : this.listeConsultants){
+				if( c.getPrenom().equals(res[1]) && c.getNom().equals(res[0]) ){
+					temp = c;
+				}
+			}
+			if( temp == null){
+				throw new Exception("Aucun client trouvé avec ces paramètres");
+			}
+			boolean missionDuClientTrouve = false;
+			
+			for (Mission m : listeMission){
+				for(Consultant c : m .getConsultant()){
+					if( c == temp ){
+						missionDuClientTrouve=true;
+					}
+				}
+				if( missionDuClientTrouve ){
+					mainView.afficher("Le consultant : "+temp.toString()+" est disponible à partir du "+m.getDateDebut());
+					break;
+				}
+			}
+			if( missionDuClientTrouve != true){
+				mainView.afficher("Le consultant : "+temp.toString()+" est déjà disponible");
+			}
 		}
 		else if(commande.matches("clear.*"))
 		{
