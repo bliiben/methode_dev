@@ -9,7 +9,11 @@ public class Mission {
 	private Client client;
 	private ArrayList<Consultant> consultant;
 	private String description;
+	private boolean fini = false;
 	
+	
+	
+
 	public Mission(Date pdateDebut,Date pdateFin ,Client pclient ,ArrayList<Consultant> pconsultant,String pDescription){
 		dateDebut = pdateDebut;
 		dateFin = pdateFin;
@@ -20,11 +24,16 @@ public class Mission {
 	
 	@Override
 	public String toString() {
-		return "Mission [dateDebut=" + dateDebut + ", dateFin=" + dateFin
+		return (fini?"FINI":"EN COURS")+" Mission [dateDebut=" + dateDebut + ", dateFin=" + dateFin
 				+ ", client=" + client + ", consultant=" + consultant
 				+ ", description=" + description + "]";
 	}
-
+	public boolean isFini() {
+		return fini;
+	}
+	public void setFini(boolean fini) {
+		this.fini = fini;
+	}
 	public Date getDateFin() {
 		return dateFin;
 	}

@@ -1,12 +1,14 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
@@ -75,14 +77,15 @@ public class MainView{
 		contenu.addMouseListener(new PopClickListener());
 		commande = new JTextField();
 		commande.addMouseListener(new PopClickListener());
+
+
 		
 		//Initialisation des evenements du textfield
 		commande.addKeyListener(new KeyListener() {
 			
 			@Override
-			public void keyTyped(KeyEvent arg0) {
-				String key = arg0.getKeyChar()+"";
-				if(key.equals("\n")) 
+			public void keyTyped(KeyEvent event) {
+				if(event.getKeyChar() == '\n')
 				{
 					try{
 					mainController.commande(commande.getText());
@@ -90,6 +93,13 @@ public class MainView{
 						afficher(e.getMessage());
 					}
 					commande.setText("");
+				}
+				else if (event.getKeyChar() == ' ' && event.isControlDown()) {
+					String retour = mainController.autoComplete(commande.getText());
+					if (retour != null)
+						commande.setText(retour);
+					else
+						System.out.println("Pas de commande correspondate");
 				}
 			}
 			
@@ -137,7 +147,6 @@ public class MainView{
 		contenu.setText("");
 	}
 	
-
 	/**
 	 * @param args
 	 */
