@@ -1,6 +1,9 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -10,6 +13,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -111,13 +115,31 @@ public class MainView{
 			public void keyPressed(KeyEvent arg0) {
 			}
 		});
-		
+		/*
+		 * JBUTTON 
+		 */
+		JButton j = new JButton("Valider");
+		j.setSize(20, 20); 
 		/*
 		 * Ajout des composants a la vue
 		 */
 		mainFrame.add(contenu, BorderLayout.CENTER);		
-		mainFrame.add(commande, BorderLayout.PAGE_END);
-		
+		JPanel panelend = new JPanel();
+		commande.setPreferredSize(new Dimension(500,20));
+		panelend.add(commande, BorderLayout.CENTER);
+		panelend.add(j, BorderLayout.EAST);
+		mainFrame.add(panelend, BorderLayout.PAGE_END);
+		j.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+					try{
+					mainController.commande(commande.getText());
+					}catch (Exception e) {
+						afficher(e.getMessage());
+					}
+					commande.setText("");
+			}});
 		//Initilisation des attributs de la vue
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.pack();
