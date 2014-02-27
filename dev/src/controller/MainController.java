@@ -1,8 +1,13 @@
 package controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+
+import javax.swing.JTextField;
 
 import model.Client;
 import model.Consultant;
@@ -18,6 +23,7 @@ public class MainController {
 	private ArrayList<Consultant> listeConsultants;
 	private ArrayList<Client> listeClient;
 	private ArrayList<Mission> listeMission;
+	public DateFormat d = new SimpleDateFormat("dd/mm/yyyy");
 	
 	public MainController(MainView mainView) {
 		super();
@@ -27,7 +33,12 @@ public class MainController {
 		this.mainView = mainView;
 		
 		listeClient.add(new Client("blagnac","0102030405","toto@gmail.com"));
-		listeMission.add(new Mission(new Date(),new Date(),listeClient.get(0),new ArrayList<Consultant>(),"essais"));
+		try {
+			listeMission.add(new Mission(d.parse("27/02/2014"),d.parse("27/02/2014"),listeClient.get(0),new ArrayList<Consultant>(),"essais"));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			listeMission.get(0).envoyerMission(listeConsultants.get(3));
 		} catch (Exception e) {
@@ -113,7 +124,7 @@ public class MainController {
 		}
 		else if (commande.matches("listeclient.*"))
 		{			
-			mainView.afficher("Liste des consultants :");
+			mainView.afficher("Liste des clients :");
 			for(Client client:listeClient)
 			{
 				mainView.afficher(client.toString());
@@ -180,8 +191,8 @@ public class MainController {
 			if(tmp==null)
 				throw new Exception("Le client n'existe pas");
 			
-			m = new Mission(new Date(res[0]),new Date(res[1]),tmp,new ArrayList<Consultant>(),res[3]);
-			//ajoutermission 11/01/14;11/01/14;b;une description folll
+			m = new Mission(d.parse(res[0]),d.parse(res[1]),tmp,new ArrayList<Consultant>(),res[3]);
+			//ajoutermission 11/01/14;11/01/14;b; une description foll
 			listeMission.add(m);
 			
 			mainView.afficher("Mission ajoutée : "+listeMission.get(listeMission.size()-1));
@@ -229,7 +240,7 @@ public class MainController {
 			if( tmpClient==null)
 				throw new Exception("Sorry pas de client");
 			
-			Date d = new Date(res[0]);
+			
 			Mission mnms=null;
 			for( Mission m : listeMission){
 				if(m.getClient()== tmpClient){
@@ -246,6 +257,31 @@ public class MainController {
 		else if(commande.matches("exit.*")){
 			System.exit(0);
 		}
+		else if ( commande.matches("retourmission.*")){
+			String res[] = parametre(commande, "retourmission");
+			if( res.length != 3)
+				throw new Exception("Il n'y a pas assez de paramètres");
+			
+			Mission temp = null;
+			for (Mission m : listeMission){
+				
+				if( m.getClient().getNomEntreprise().equals(res[0]) && d.format(m.getDateDebut()).equals(res[1]) && d.format(m.getDateFin()).equals(res[2]) ){
+					temp=m;
+				}
+			}
+			if(temp==null)
+				throw new Exception("Pas de mission trouvé");
+			
+			mainView.afficher("Mission fini, consultant libéré :");
+			for ( Consultant c : temp.getConsultant() ){
+				c.setDisponible(true);
+				mainView.afficher(c.toString());
+				
+			}
+			
+			temp.setFini(true);
+			
+		}
 		//cas ou la commande n'est pas reconnue
 		else
 		{
@@ -258,5 +294,39 @@ public class MainController {
 	
 	public static String [] parametre(String commande, String commandeAttendu){
 		return commande.replaceAll(commandeAttendu+" (.*)", "$1").split(";");
+	}
+
+	public String autoComplete(String commande) {
+
+		String listeDesCommande[] = {
+				"listeconsultant",
+				"listeconsultantlibre",
+				"disponibiliteconsultant",
+				"ajouterconsultant",
+				"supprimerconsultant",
+				"listeclient",
+				"ajouterclient",
+				"supprimerclient",
+				"affichermissionvacantes",
+				"ajoutermission",
+				"clientsansmission",
+				"partirenmission",
+				"exit",
+				"retourmission"
+		};
+		int nombre=0;
+		String ss="";
+		for ( String s : listeDesCommande){
+			
+			System.out.println(s);
+			if( s.length() > commande.length() && commande.equals(s.substring(0, commande.length())) ){
+				ss=s;
+				nombre++;
+			}
+		}
+		if( nombre != 1)
+			return null;
+		else
+			return ss;
 	}
 }
